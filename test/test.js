@@ -1,5 +1,5 @@
-const test = require('tape')
-const EasyWorker = require('../dist/worker.cjs.js');
+import test from 'tape'
+import EasyWorker from '../src/worker.js'
 
 test('can spinup node Worker', async tape => {
   const worker = await new EasyWorker('./test/worker.js')

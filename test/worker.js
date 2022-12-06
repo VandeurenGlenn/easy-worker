@@ -1,4 +1,4 @@
-const Worker = require('./../dist/worker.cjs.js');
+import Worker from './../src/worker.js'
 
 (async () => {
   const worker = await new Worker()

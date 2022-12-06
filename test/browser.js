@@ -1,14 +1,17 @@
-const puppeteer = require('puppeteer');
-const serve = require('@vandeurenglenn/project/project-serve');
+import puppeteer from 'puppeteer'
+import serve from '@vandeurenglenn/project/project-serve.js'
 
-(async () => {
+
   const server = serve('./', 58877)
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto('http://127.0.0.1:58877/test/www/index.html');
   
-  page.on('console', message =>  
-    console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`)
+  page.on('console', message =>  {
+    if (message.text() !== '2') process.exit(1)
+    else process.exit(0)
+  }
+    
   )
 
   page.on('workercreated', async worker => {
@@ -21,4 +24,3 @@ const serve = require('@vandeurenglenn/project/project-serve');
     server.close()
   })
   
-})();
