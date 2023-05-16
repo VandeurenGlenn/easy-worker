@@ -4,14 +4,16 @@ export default class EasyWorker {
   #isBrowser = false
   #isWorker = false
 
+  worker: Worker
+
   get isWorker() {
     return this.#isWorker
   }
-  constructor(url, options) {
+  constructor(url: string, options: {}) {
     return this.#init(url, options)
   }
 
-  #init(url, options = {}) {
+  #init(url: string | URL, options = {}) {
     if (url) {
       if (globalThis.Worker) {
         this.#isBrowser = true
@@ -36,22 +38,22 @@ export default class EasyWorker {
     return this
   }
 
-  onmessage(fn) {
+  onmessage(fn: { (message: any): void; (arg0: any): any }): void {
     if (this.#isBrowser) this.worker.onmessage = ({data}) => fn(data)
     else this.worker.on(this.#messageEvent, fn)
   }
 
-  postMessage(message) {
+  postMessage(message: any): void {
     if (this.#isBrowser) this.worker.postMessage(message);
     else this.worker.send(message)
   }
 
-  terminate() {
+  terminate(): void {
     if (this.#isBrowser) this.worker.terminate()
     else this.worker.kill()
   }
 
-  onerror(fn) {
+  onerror(fn: (error: any) => void): void {
     if (this.#isBrowser) this.worker.onerror = fn
     else this.worker.on(this.#errorEvent, fn)
   }
@@ -61,13 +63,13 @@ export default class EasyWorker {
    * @param {*} data 
    * @returns {Promise} resolves result onmessage & rejects on error
    */
-  once(data) {
+  once(data: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.onmessage(message => {
+      this.onmessage((message: unknown) => {
         resolve(message)
         this.terminate()
       })
-      this.onerror(error => {
+      this.onerror((error: any) => {
         reject(error)
         this.terminate()
       })

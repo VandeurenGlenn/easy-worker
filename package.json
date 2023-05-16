@@ -5,6 +5,7 @@
   "main": "src/worker.js",
   "type": "module",
   "scripts": {
+    "build": "rollup -c",
     "serve": "jsproject --serve ./ --port 58877",
     "test:all": "node test/test.js && node test/browser.js",
     "test": "concurrently npm:test:*"
@@ -16,9 +17,12 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.0",
     "@vandeurenglenn/project": "^0.2.1",
     "concurrently": "^7.5.0",
     "puppeteer": "^18.0.5",
-    "tape": "^5.6.1"
+    "rollup": "^3.20.2",
+    "tape": "^5.6.1",
+    "tslib": "^2.5.0"
   }
 }
